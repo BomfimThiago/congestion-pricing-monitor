@@ -1,0 +1,28 @@
+# Data — never commit, always rederivable from code
+data/raw/
+data/interim/
+data/processed/
+*.parquet
+*.duckdb
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Secrets
+.env
+secrets.yaml
