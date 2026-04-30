@@ -460,6 +460,7 @@ dependencies = [
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "statsmodels" },
     { name = "streamlit" },
+    { name = "tenacity" },
 ]
 
 [package.dev-dependencies]
@@ -488,6 +489,7 @@ requires-dist = [
     { name = "scipy", specifier = ">=1.15.3" },
     { name = "statsmodels", specifier = ">=0.14.6" },
     { name = "streamlit", specifier = ">=1.57.0" },
+    { name = "tenacity", specifier = ">=9.1.4" },
 ]
 
 [package.metadata.requires-dev]

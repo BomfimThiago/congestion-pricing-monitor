@@ -1,0 +1,16 @@
+project:
+  name: congestion-pricing-monitor
+  treatment_date: "2025-01-05"
+  pre_period_start: "2023-01-01"
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+
+sources:
+  nyc_dot_speed:
+    name: "NYC DOT Real-Time Traffic Speed"
+    url: "https://data.cityofnewyork.us/resource/i4gi-tjb9.json"
+    page_size: 50000
+    timeout_seconds: 60
