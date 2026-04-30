@@ -15,27 +15,45 @@ rolling ~33 days of history (earliest record: 2026-03-28).
 The pre-registered pre-period of 2023-01-01 onward is
 not retrievable from this source.
 
-## Decision
-
-Replace the data source. Candidates evaluated below.
-Pre-registration §4 will be updated to v1.1 with the new
-source documented and this ADR linked.
-
-## Candidates considered
-
-- Uber Movement (archived, free, ceased updates 2024)
-- NYC TLC Trip Records (free, monthly, full history)
-- MTA Bridge & Tunnel counts (free, full history, coarser)
-- INRIX / StreetLight (paid, not viable for this project)
-
 ## Decision rationale
 
-[fill in after we discuss below]
+Selected NYC TLC Trip Record Data (yellow taxi, parquet files
+on CloudFront CDN) for the following reasons:
+
+1. Full historical depth: monthly files since 2009, with
+   parquet format since May 2022. Covers the entire
+   pre-registered analysis window (2023-01 onward).
+2. Direct queryability via DuckDB over HTTPS. No local
+   ingestion of raw bytes required; aggregation is pushed
+   down to the storage layer.
+3. Used as the canonical traffic dataset by NYU/Columbia
+   researchers studying congestion pricing, providing
+   benchmarks for sanity-checking estimates.
+4. Two-month publication lag (vendor submission deadline)
+   means analysis cutoff is always max_complete_month = today - 2.
+   Documented and handled in pipeline.
 
 ## Consequences
 
-- Outcome variable in §7 may need to change
-  (e.g., taxi trip duration instead of segment speed)
-- Treatment unit definition in §5 may shift from
-  road segments to pickup/dropoff zones
-- Pre-period and post-period definitions remain valid
+- Outcome (RQ1) reformulated: from segment-level mean speed
+  to trip-level mean duration / derived speed, aggregated
+  by taxi zone × month.
+- Treatment unit changed: from road segments to TLC taxi
+  zones (PULocationID / DOLocationID). CBD zone set
+  documented in config/cbd_zones.yaml as analyst judgment
+  call (zones substantially south of 60th Street, excluding
+  FDR / West Side Highway corridors).
+- Spillover analysis (§10.5) now operates on adjacent zones
+  rather than buffer rings.
+- Yellow taxis only in v1.1; green and HVFHV deferred to
+  v1.2 for tractability of initial analysis.
+- New post-treatment indicator available: cbd_congestion_fee
+  column (2025+). Used as robustness check for treatment
+  classification, not as primary definition (column does
+  not exist in pre-period).
+
+## Pre-registration changes required
+
+Pre-registration §4, §5, §7, §10.5 require updates.
+Bump pre_registration.md to v1.1 in a separate commit
+following this ADR.
